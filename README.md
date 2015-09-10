@@ -1,29 +1,22 @@
-This folder structure should be suitable for starting a project that uses a database:
-
-* Fork this repo
-* Clone this repo
-* Run `bundle install` to install `active_record`
-* `rake generate:migration <NAME>` to create a migration (Don't include the `<` `>` in your name, it should also start with a capital)
-* `rake db:migrate` to run the migration and update the database
-* Create models in lib that subclass `ActiveRecord::Base`
-* ... ?
-* Profit
+Normal Mode
 
 
-## Rundown
+How many users are there? User.count
+What are the 5 most expensive items? Item.select('title').order(price: :desc).limit(5)
+What’s the cheapest book? Item.select('title', 'price').where(category: :Books).order(price: :asc).limit(1)
+Who lives at “6439 Zetta Hills, Willmouth, WY”? Do they have another address?User.find(40)
+Address.where(user_id: 40)
 
-```
-.
-├── Gemfile             # Details which gems are required by the project
-├── README.md           # This file
-├── Rakefile            # Defines `rake generate:migration` and `db:migrate`
-├── config
-│   └── database.yml    # Defines the database config (e.g. name of file)
-├── console.rb          # `ruby console.rb` starts `pry` with models loaded
-├── db
-│   ├── dev.sqlite3     # Default location of the database file
-│   ├── migrate         # Folder containing generated migrations
-│   └── setup.rb        # `require`ing this file sets up the db connection
-└── lib                 # Your ruby code (models, etc.) should go here
-    └── all.rb          # Require this file to auto-require _all_ `.rb` files in `lib`
-```
+Correct Virginie Mitchell’s address to “New York, NY, 10108”.User.select('id').where(first_name: 'Virginie')
+Address.update(39, :city => 'New York', :state => 'NY', :zip => "10108")
+
+How much would it cost to buy one of each tool? Item.select('price').where(category: "Tools").sum('price')
+
+How many total items did we sell? Order.sum('quantity')2125
+
+How much was spent on books?
+SELECT SUM(price * quantity) FROM orders INNER JOIN items ON orders.item_id = items.id WHERE LOWER(category) LIKE '%book%';
+
+Simulate buying an item by inserting a User for yourself and an Order for that User.
+
+
